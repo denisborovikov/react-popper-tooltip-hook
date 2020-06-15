@@ -11,10 +11,10 @@ export function usePopperTooltip(
   const {
     delayHide,
     delayShow,
-    trigger = "click",
+    trigger,
     visible: visibleControlled,
     initialVisible,
-    onVisibleChange
+    onVisibleChange,
   } = ownOptions;
 
   const [triggerElRef, setTriggerElRef] = React.useState(null);
@@ -23,12 +23,12 @@ export function usePopperTooltip(
   const [visible, setVisible] = useControlledProp({
     initial: initialVisible,
     value: visibleControlled,
-    onChange: onVisibleChange
+    onChange: onVisibleChange,
   });
 
-  const a = React.useRef();
-  console.log(a.current === setVisible);
-  a.current = setVisible;
+  // const a = React.useRef();
+  // console.log(a.current === setVisible);
+  // a.current = setVisible;
 
   const timer = React.useRef();
 
@@ -36,11 +36,11 @@ export function usePopperTooltip(
     visible,
     triggerElRef,
     tooltipElRef,
-    arrowElRef
+    arrowElRef,
   });
 
   const isTriggeredBy = React.useCallback(
-    event => {
+    (event) => {
       return (
         trigger === event || (Array.isArray(trigger) && trigger.includes(event))
       );
@@ -50,18 +50,17 @@ export function usePopperTooltip(
 
   // We update the arrow modifier with an arrow element ref.
   const options = React.useMemo(() => {
-    console.log(1);
     let includesArrowModifier = false;
     const modifiers =
-      popperOptions.modifiers?.map(modifier => {
+      popperOptions.modifiers?.map((modifier) => {
         if (modifier.name === "arrow") {
           includesArrowModifier = true;
           return {
             ...modifier,
             options: {
               ...modifier.options,
-              element: arrowElRef
-            }
+              element: arrowElRef,
+            },
           };
         }
 
@@ -72,7 +71,7 @@ export function usePopperTooltip(
       ...popperOptions,
       modifiers: includesArrowModifier
         ? modifiers
-        : modifiers.concat({ name: "arrow", options: { element: arrowElRef } })
+        : modifiers.concat({ name: "arrow", options: { element: arrowElRef } }),
     };
   }, [popperOptions, arrowElRef]);
 
@@ -81,12 +80,12 @@ export function usePopperTooltip(
   const hideTooltip = React.useCallback(() => {
     clearTimeout(timer.current);
     timer.current = setTimeout(() => setVisible(false), delayHide);
-  }, [delayHide]);
+  }, [delayHide, setVisible]);
 
   const showTooltip = React.useCallback(() => {
     clearTimeout(timer.current);
     timer.current = setTimeout(() => setVisible(true), delayShow);
-  }, [delayShow]);
+  }, [delayShow, setVisible]);
 
   const toggleTooltip = React.useCallback(() => {
     const { visible } = getLatest();
@@ -99,7 +98,7 @@ export function usePopperTooltip(
 
   // Handle click outside
   React.useEffect(() => {
-    const handleStart = event => {
+    const handleStart = (event) => {
       const { tooltipElRef, triggerElRef } = getLatest();
       const target = event.target;
       if (target instanceof Node) {
@@ -145,7 +144,7 @@ export function usePopperTooltip(
     };
   }, [triggerElRef, isTriggeredBy, showTooltip, hideTooltip]);
 
-  // Trigger: hover
+  // Trigger: hover the trigger
   React.useEffect(() => {
     if (triggerElRef == null || !isTriggeredBy("hover")) return;
 
@@ -157,35 +156,46 @@ export function usePopperTooltip(
     };
   }, [triggerElRef, isTriggeredBy, showTooltip, hideTooltip]);
 
+  // Trigger: hover the tooltip
+  React.useEffect(() => {
+    if (tooltipElRef == null || !isTriggeredBy("hover")) return;
+
+    tooltipElRef.addEventListener("mouseenter", showTooltip);
+    tooltipElRef.addEventListener("mouseleave", hideTooltip);
+    return () => {
+      tooltipElRef.removeEventListener("mouseenter", showTooltip);
+      tooltipElRef.removeEventListener("mouseleave", hideTooltip);
+    };
+  }, [tooltipElRef, isTriggeredBy, showTooltip, hideTooltip]);
+
   const getTooltipProps = React.useCallback(
-    args => {
+    (args) => {
       return {
         ...args,
         style: { ...styles.popper, ...args?.style },
-        ...attributes.popper
+        ...attributes.popper,
       };
     },
     [attributes, styles]
   );
 
   const getArrowProps = React.useCallback(
-    args => {
+    (args) => {
       return {
         ...args,
         style: { ...styles.arrow, ...args?.style },
-        ...attributes.arrow
+        ...attributes.arrow,
       };
     },
     [attributes, styles]
   );
 
   return {
-    attributes,
     getArrowProps,
     getTooltipProps,
     setArrowElRef,
     setTooltipElRef,
     setTriggerElRef,
-    visible
+    visible,
   };
 }

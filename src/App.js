@@ -16,10 +16,11 @@ export default function App() {
     visible
   } = usePopperTooltip(
     {
+      trigger: 'hover',
       delayHide: 300,
       delayShow: 300,
       visible: show,
-      onVisibleChange: setShow
+      onVisibleChange: setShow,
     },
     {
       placement: "bottom",
