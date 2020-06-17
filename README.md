@@ -3,14 +3,19 @@
 Experimenting with possible hook API for [react-popper-tooltip](https://github.com/mohsinulhaq/react-popper-tooltip).
 
 [Codesandbox](https://codesandbox.io/s/github/denisborovikov/react-popper-tooltip-hook).
+
 ```jsx
 const {
+  arrowRef,
+  tooltipRef,
+  triggerRef,
   getArrowProps,
   getTooltipProps,
   setArrowRef,
   setTooltipRef,
   setTriggerRef,
   visible,
+  ...popperProps
 } = usePopperTooltip(ownProps, popperJsProps);
 ```
 
