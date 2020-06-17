@@ -166,9 +166,12 @@ export function usePopperTooltip(
     };
   };
 
-  useCheckRefEqual(getArrowProps);
+  // useCheckRefEqual(getArrowProps);
 
   return {
+    arrowRef,
+    tooltipRef,
+    triggerRef,
     getArrowProps,
     getTooltipProps,
     setArrowRef,
