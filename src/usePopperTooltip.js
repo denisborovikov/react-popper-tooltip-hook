@@ -4,6 +4,12 @@ import { useControlledProp, useGetLatest } from "./utils";
 
 const emptyObj = {};
 
+function useCheckRefEqual(val) {
+  const ref = React.useRef();
+  console.log(ref.current === val);
+  ref.current = val;
+}
+
 export function usePopperTooltip(
   ownOptions = emptyObj,
   popperOptions = emptyObj
@@ -17,65 +23,38 @@ export function usePopperTooltip(
     onVisibleChange,
   } = ownOptions;
 
-  const [triggerElRef, setTriggerElRef] = React.useState(null);
-  const [tooltipElRef, setTooltipElRef] = React.useState(null);
-  const [arrowElRef, setArrowElRef] = React.useState(null);
+  const [triggerRef, setTriggerRef] = React.useState(null);
+  const [tooltipRef, setTooltipRef] = React.useState(null);
+  const [arrowRef, setArrowRef] = React.useState(null);
   const [visible, setVisible] = useControlledProp({
     initial: initialVisible,
     value: visibleControlled,
     onChange: onVisibleChange,
   });
 
-  // const a = React.useRef();
-  // console.log(a.current === setVisible);
-  // a.current = setVisible;
-
   const timer = React.useRef();
-
-  const getLatest = useGetLatest({
-    visible,
-    triggerElRef,
-    tooltipElRef,
-    arrowElRef,
-  });
 
   const isTriggeredBy = React.useCallback(
     (event) => {
-      return (
-        trigger === event || (Array.isArray(trigger) && trigger.includes(event))
-      );
+      return Array.isArray(trigger)
+        ? trigger.includes(event)
+        : trigger === event;
     },
     [trigger]
   );
 
-  // We update the arrow modifier with an arrow element ref.
-  const options = React.useMemo(() => {
-    let includesArrowModifier = false;
-    const modifiers =
-      popperOptions.modifiers?.map((modifier) => {
-        if (modifier.name === "arrow") {
-          includesArrowModifier = true;
-          return {
-            ...modifier,
-            options: {
-              ...modifier.options,
-              element: arrowElRef,
-            },
-          };
-        }
+  const { styles, attributes, ...popperProps } = usePopper(
+    triggerRef,
+    tooltipRef,
+    popperOptions
+  );
 
-        return modifier;
-      }) || [];
-
-    return {
-      ...popperOptions,
-      modifiers: includesArrowModifier
-        ? modifiers
-        : modifiers.concat({ name: "arrow", options: { element: arrowElRef } }),
-    };
-  }, [popperOptions, arrowElRef]);
-
-  const { styles, attributes } = usePopper(triggerElRef, tooltipElRef, options);
+  const getLatest = useGetLatest({
+    visible,
+    triggerRef,
+    tooltipRef,
+    arrowRef,
+  });
 
   const hideTooltip = React.useCallback(() => {
     clearTimeout(timer.current);
@@ -96,16 +75,19 @@ export function usePopperTooltip(
     }
   }, [getLatest, hideTooltip, showTooltip]);
 
+  // Timer clean-up
+  React.useEffect(() => clearTimeout(timer.current), []);
+
   // Handle click outside
   React.useEffect(() => {
     const handleStart = (event) => {
-      const { tooltipElRef, triggerElRef } = getLatest();
+      const { tooltipRef, triggerRef } = getLatest();
       const target = event.target;
       if (target instanceof Node) {
         if (
-          tooltipElRef != null &&
-          !tooltipElRef.contains(target) &&
-          !triggerElRef.contains(target)
+          tooltipRef != null &&
+          !tooltipRef.contains(target) &&
+          !triggerRef.contains(target)
         ) {
           hideTooltip();
         }
@@ -119,83 +101,80 @@ export function usePopperTooltip(
       document.removeEventListener("touchstart", handleStart);
       document.removeEventListener("mousedown", handleStart);
     };
-  }, [getLatest, hideTooltip, isTriggeredBy]);
-
-  // Timer clean-up
-  React.useEffect(() => clearTimeout(timer.current), []);
+  }, [getLatest, hideTooltip]);
 
   // Trigger: click
   React.useEffect(() => {
-    if (triggerElRef == null || !isTriggeredBy("click")) return;
+    if (triggerRef == null || !isTriggeredBy("click")) return;
 
-    triggerElRef.addEventListener("click", toggleTooltip);
-    return () => triggerElRef.removeEventListener("click", toggleTooltip);
-  }, [triggerElRef, isTriggeredBy, toggleTooltip]);
+    triggerRef.addEventListener("click", toggleTooltip);
+    return () => triggerRef.removeEventListener("click", toggleTooltip);
+  }, [triggerRef, isTriggeredBy, toggleTooltip]);
 
   // Trigger: focus
   React.useEffect(() => {
-    if (triggerElRef == null || !isTriggeredBy("focus")) return;
+    if (triggerRef == null || !isTriggeredBy("focus")) return;
 
-    triggerElRef.addEventListener("focus", showTooltip);
-    triggerElRef.addEventListener("blur", hideTooltip);
+    triggerRef.addEventListener("focus", showTooltip);
+    triggerRef.addEventListener("blur", hideTooltip);
     return () => {
-      triggerElRef.removeEventListener("focus", showTooltip);
-      triggerElRef.removeEventListener("blur", hideTooltip);
+      triggerRef.removeEventListener("focus", showTooltip);
+      triggerRef.removeEventListener("blur", hideTooltip);
     };
-  }, [triggerElRef, isTriggeredBy, showTooltip, hideTooltip]);
+  }, [triggerRef, isTriggeredBy, showTooltip, hideTooltip]);
 
-  // Trigger: hover the trigger
+  // Trigger: hover (trigger)
   React.useEffect(() => {
-    if (triggerElRef == null || !isTriggeredBy("hover")) return;
+    if (triggerRef == null || !isTriggeredBy("hover")) return;
 
-    triggerElRef.addEventListener("mouseenter", showTooltip);
-    triggerElRef.addEventListener("mouseleave", hideTooltip);
+    triggerRef.addEventListener("mouseenter", showTooltip);
+    triggerRef.addEventListener("mouseleave", hideTooltip);
     return () => {
-      triggerElRef.removeEventListener("mouseenter", showTooltip);
-      triggerElRef.removeEventListener("mouseleave", hideTooltip);
+      triggerRef.removeEventListener("mouseenter", showTooltip);
+      triggerRef.removeEventListener("mouseleave", hideTooltip);
     };
-  }, [triggerElRef, isTriggeredBy, showTooltip, hideTooltip]);
+  }, [triggerRef, isTriggeredBy, showTooltip, hideTooltip]);
 
-  // Trigger: hover the tooltip
+  // Trigger: hover (tooltip), keep the tooltip open if hovered
   React.useEffect(() => {
-    if (tooltipElRef == null || !isTriggeredBy("hover")) return;
+    if (tooltipRef == null || !isTriggeredBy("hover")) return;
 
-    tooltipElRef.addEventListener("mouseenter", showTooltip);
-    tooltipElRef.addEventListener("mouseleave", hideTooltip);
+    tooltipRef.addEventListener("mouseenter", showTooltip);
+    tooltipRef.addEventListener("mouseleave", hideTooltip);
     return () => {
-      tooltipElRef.removeEventListener("mouseenter", showTooltip);
-      tooltipElRef.removeEventListener("mouseleave", hideTooltip);
+      tooltipRef.removeEventListener("mouseenter", showTooltip);
+      tooltipRef.removeEventListener("mouseleave", hideTooltip);
     };
-  }, [tooltipElRef, isTriggeredBy, showTooltip, hideTooltip]);
+  }, [tooltipRef, isTriggeredBy, showTooltip, hideTooltip]);
 
-  const getTooltipProps = React.useCallback(
-    (args) => {
-      return {
-        ...args,
-        style: { ...styles.popper, ...args?.style },
-        ...attributes.popper,
-      };
-    },
-    [attributes, styles]
-  );
+  // Tooltip props getter
+  const getTooltipProps = (args) => {
+    return {
+      ...args,
+      style: { ...styles.popper, ...args?.style },
+      ...attributes.popper,
+    };
+  };
 
-  const getArrowProps = React.useCallback(
-    (args) => {
-      return {
-        ...args,
-        style: { ...styles.arrow, ...args?.style },
-        ...attributes.arrow,
-      };
-    },
-    [attributes, styles]
-  );
+  // Arrow props getter
+  const getArrowProps = (args) => {
+    return {
+      ...args,
+      style: { ...styles.arrow, ...args?.style },
+      ...attributes.arrow,
+      "data-popper-arrow": true,
+    };
+  };
+
+  useCheckRefEqual(getArrowProps);
 
   return {
     getArrowProps,
     getTooltipProps,
-    setArrowElRef,
-    setTooltipElRef,
-    setTriggerElRef,
+    setArrowRef,
+    setTooltipRef,
+    setTriggerRef,
     visible,
+    ...popperProps,
   };
 }

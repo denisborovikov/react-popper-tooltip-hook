@@ -2,46 +2,71 @@ import React from "react";
 import "./styles.css";
 import { usePopperTooltip } from "./usePopperTooltip";
 
+const modifiers = [
+  // { name: "offset", options: { offset: [0, 10] } },
+  // {
+  //   name: "followCursor",
+  //   enabled: false,
+  //   phase: "main",
+  //   fn: (data) => {
+  //     console.log("data", data);
+  //   },
+  // },
+  // {
+  //   name: "offset",
+  //   options: {
+  //     offset: ({ placement, reference, popper,  }) => {
+  //       console.log('popper', popper)
+  //       if (placement === "bottom") {
+  //         return [0, 100];
+  //       } else {
+  //         return [];
+  //       }
+  //     },
+  //   },
+  // },
+];
+
 export default function App() {
   const [show, setShow] = React.useState(false);
 
-  // console.log(show);
+  // console.log('controlled visible', show);
 
   const {
     getArrowProps,
     getTooltipProps,
-    setArrowElRef,
-    setTooltipElRef,
-    setTriggerElRef,
-    visible
+    setArrowRef,
+    setTooltipRef,
+    setTriggerRef,
+    visible,
   } = usePopperTooltip(
     {
-      trigger: 'hover',
-      delayHide: 300,
-      delayShow: 300,
+      trigger: "click",
+      // delayHide: 300,
+      // delayShow: 300,
       visible: show,
       onVisibleChange: setShow,
     },
     {
       placement: "bottom",
-      modifiers: [{ name: "offset", options: { offset: [0, 10] } }]
+      modifiers,
     }
   );
 
   return (
     <>
-      <button type="button" ref={setTriggerElRef}>
+      <button type="button" ref={setTriggerRef}>
         Reference element
       </button>
 
       {visible && (
         <div
-          ref={setTooltipElRef}
+          ref={setTooltipRef}
           {...getTooltipProps({ className: "tooltip-container" })}
         >
           Popper element
           <div
-            ref={setArrowElRef}
+            ref={setArrowRef}
             {...getArrowProps({ className: "tooltip-arrow" })}
           />
         </div>

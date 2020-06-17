@@ -7,27 +7,27 @@ Experimenting with possible hook API for [react-popper-tooltip](https://github.c
 const {
   getArrowProps,
   getTooltipProps,
-  setArrowElRef,
-  setTooltipElRef,
-  setTriggerElRef,
+  setArrowRef,
+  setTooltipRef,
+  setTriggerRef,
   visible,
 } = usePopperTooltip(ownProps, popperJsProps);
 ```
 
 ```jsx
 <>
-  <button type="button" ref={setTriggerElRef}>
+  <button type="button" ref={setTriggerRef}>
     Reference element
   </button>
 
   {visible && (
     <div
-      ref={setTooltipElRef}
+      ref={setTooltipRef}
       {...getTooltipProps({ className: "tooltip-container" })}
     >
       Popper element
       <div
-        ref={setArrowElRef}
+        ref={setArrowRef}
         {...getArrowProps({ className: "tooltip-arrow" })}
       />
     </div>
