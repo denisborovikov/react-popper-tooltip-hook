@@ -2,6 +2,7 @@ import React from "react";
 
 const noop = Object.freeze(function() {});
 
+// kudos to @tannerlinsley https://twitter.com/tannerlinsley
 export function useGetLatest(val) {
   const ref = React.useRef(val);
   ref.current = val;
@@ -32,6 +33,5 @@ export function useControlledProp({ initial, value, onChange = noop }) {
   return [
     isControlled ? value : state,
     isControlled ? onChange : set,
-    isControlled
   ];
 }

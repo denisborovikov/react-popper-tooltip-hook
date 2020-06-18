@@ -3,7 +3,7 @@ import "./styles.css";
 import { usePopperTooltip } from "./usePopperTooltip";
 
 export function FollowCursor() {
-  const mousePos = React.useRef();
+  const store = React.useRef();
 
   // const modifiers = React.useMemo(
   //   () => [
@@ -39,15 +39,17 @@ export function FollowCursor() {
       // delayShow: 300,
     },
     {
-      placement: "right",
+      placement: "auto",
     }
   );
 
   React.useLayoutEffect(() => {
     if (triggerRef == null || update == null) return;
 
+    const tooltipRect = tooltipRef.getBoundingClientRect();
+
     function storeMousePosition({ pageX, pageY }) {
-      mousePos.current = { pageX, pageY };
+      store.current = { pageX, pageY, ...tooltipRect };
       update();
     }
 
@@ -57,10 +59,9 @@ export function FollowCursor() {
   }, [triggerRef, update]);
 
   function getTransform() {
-    if (tooltipRef && mousePos.current) {
-      const { width, height } = tooltipRef.getBoundingClientRect();
+    if (tooltipRef && store.current) {
+      const { pageX, pageY, width, height } = store.current;
 
-      const { pageX, pageY } = mousePos.current;
       const x =
         pageX + width > window.pageXOffset + document.body.offsetWidth
           ? pageX - width
@@ -69,14 +70,18 @@ export function FollowCursor() {
         pageY + height > window.pageYOffset + document.body.offsetHeight
           ? pageY - height
           : pageY;
-      return `translate3d(${x}px, ${y}px, 0`;
+      return `translate3d(${x + 10}px, ${y + 10}px, 0`;
     }
   }
 
   return (
     <>
       <button type="button" ref={setTriggerRef}>
-        Reference element
+        <br />
+        <br />
+        Reference element <br />
+        <br />
+        <br />
       </button>
 
       {visible && (
@@ -88,12 +93,6 @@ export function FollowCursor() {
           })}
         >
           Popper element
-          <div
-            ref={setArrowRef}
-            {...getArrowProps({
-              className: "tooltip-arrow",
-            })}
-          />
         </div>
       )}
     </>
