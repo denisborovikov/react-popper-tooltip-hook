@@ -2,36 +2,9 @@ import React from "react";
 import "./styles.css";
 import { usePopperTooltip } from "./usePopperTooltip";
 
-const modifiers = [
-  // { name: "offset", options: { offset: [0, 10] } },
-  // {
-  //   name: "followCursor",
-  //   enabled: false,
-  //   phase: "main",
-  //   fn: (data) => {
-  //     console.log("data", data);
-  //   },
-  // },
-  // {
-  //   name: "offset",
-  //   options: {
-  //     offset: ({ placement, reference, popper,  }) => {
-  //       console.log('popper', popper)
-  //       if (placement === "bottom") {
-  //         return [0, 100];
-  //       } else {
-  //         return [];
-  //       }
-  //     },
-  //   },
-  // },
-];
+const modifiers = [{ name: "offset", options: { offset: [10, 10] } }];
 
 export default function App() {
-  const [show, setShow] = React.useState(false);
-
-  // console.log('controlled visible', show);
-
   const {
     getArrowProps,
     getTooltipProps,
@@ -44,8 +17,6 @@ export default function App() {
       trigger: "click",
       // delayHide: 300,
       // delayShow: 300,
-      visible: show,
-      onVisibleChange: setShow,
     },
     {
       placement: "bottom",
