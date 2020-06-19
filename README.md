@@ -16,7 +16,7 @@ const {
   setTriggerRef,
   visible,
   ...popperProps
-} = usePopperTooltip(ownProps, popperJsProps);
+} = usePopperTooltip(config, popperOptions);
 ```
 
 ```jsx

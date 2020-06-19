@@ -10,38 +10,28 @@ function useCheckRefEqual(val) {
   ref.current = val;
 }
 
-export function usePopperTooltip(
-  ownOptions = emptyObj,
-  popperOptions = emptyObj
-) {
-  const {
-    delayHide,
-    delayShow,
-    trigger,
-    visible: visibleControlled,
-    initialVisible,
-    onVisibleChange,
-  } = ownOptions;
+const defaultConfig = {
+  trigger: "click",
+  delayHide: 0,
+  delayShow: 0,
+};
+
+export function usePopperTooltip(config = emptyObj, popperOptions = emptyObj) {
+  config = {
+    ...defaultConfig,
+    ...config,
+  };
 
   const [triggerRef, setTriggerRef] = React.useState(null);
   const [tooltipRef, setTooltipRef] = React.useState(null);
   const [arrowRef, setArrowRef] = React.useState(null);
   const [visible, setVisible] = useControlledProp({
-    initial: initialVisible,
-    value: visibleControlled,
-    onChange: onVisibleChange,
+    initial: config.initialVisible,
+    value: config.visible,
+    onChange: config.onVisibleChange,
   });
 
   const timer = React.useRef();
-
-  const isTriggeredBy = React.useCallback(
-    (event) => {
-      return Array.isArray(trigger)
-        ? trigger.includes(event)
-        : trigger === event;
-    },
-    [trigger]
-  );
 
   const { styles, attributes, ...popperProps } = usePopper(
     triggerRef,
@@ -54,21 +44,41 @@ export function usePopperTooltip(
     triggerRef,
     tooltipRef,
     arrowRef,
+    config,
+    popperOptions,
   });
+
+  const isTriggeredBy = React.useCallback(
+    (event) => {
+      const { config } = getLatest();
+
+      return Array.isArray(config.trigger)
+        ? config.trigger.includes(event)
+        : config.trigger === event;
+    },
+    [getLatest]
+  );
+
+  useCheckRefEqual(isTriggeredBy);
 
   const hideTooltip = React.useCallback(() => {
     clearTimeout(timer.current);
-    timer.current = setTimeout(() => setVisible(false), delayHide);
-  }, [delayHide, setVisible]);
+    timer.current = setTimeout(
+      () => setVisible(false),
+      getLatest().config.delayHide
+    );
+  }, [getLatest, setVisible]);
 
   const showTooltip = React.useCallback(() => {
     clearTimeout(timer.current);
-    timer.current = setTimeout(() => setVisible(true), delayShow);
-  }, [delayShow, setVisible]);
+    timer.current = setTimeout(
+      () => setVisible(true),
+      getLatest().config.delayShow
+    );
+  }, [getLatest, setVisible]);
 
   const toggleTooltip = React.useCallback(() => {
-    const { visible } = getLatest();
-    if (visible) {
+    if (getLatest().visible) {
       hideTooltip();
     } else {
       showTooltip();
