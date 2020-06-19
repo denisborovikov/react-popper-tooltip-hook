@@ -14,7 +14,7 @@ export function FollowCursorExample() {
     visible,
     update,
   } = usePopperTooltip({
-    trigger: "click",
+    trigger: "hover",
   });
 
   React.useEffect(() => {
@@ -49,7 +49,9 @@ export function FollowCursorExample() {
   }
 
   return (
-    <>
+    <div className="App">
+      <h1>Follow cursor example</h1>
+
       <button type="button" ref={setTriggerRef}>
         <br />
         <br />
@@ -69,6 +71,6 @@ export function FollowCursorExample() {
           Popper element
         </div>
       )}
-    </>
+    </div>
   );
 }

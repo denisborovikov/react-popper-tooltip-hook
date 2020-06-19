@@ -28,12 +28,19 @@ export function MutationObserverExample() {
     if (tooltipRef == null || update == null) return;
 
     const observer = new MutationObserver(update);
-    observer.observe(tooltipRef, { attributes: true, childList: true, subtree: true });
+    observer.observe(tooltipRef, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
     return () => observer.disconnect();
   }, [tooltipRef, update]);
 
   return (
-    <>
+    <div className="App">
+      <h1>Mutation observer</h1>
+      <p>Watch for the tooltip size changes. Resize the textarea.</p>
+
       <button type="button" ref={setTriggerRef}>
         Reference element
       </button>
@@ -50,6 +57,6 @@ export function MutationObserverExample() {
           />
         </div>
       )}
-    </>
+    </div>
   );
 }

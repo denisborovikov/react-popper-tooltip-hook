@@ -156,19 +156,19 @@ export function usePopperTooltip(config = emptyObj, popperOptions = emptyObj) {
   }, [tooltipRef, isTriggeredBy, showTooltip, hideTooltip]);
 
   // Tooltip props getter
-  const getTooltipProps = (args) => {
+  const getTooltipProps = (args = {}) => {
     return {
       ...args,
-      style: { ...styles.popper, ...args?.style },
+      style: { ...styles.popper, ...args.style },
       ...attributes.popper,
     };
   };
 
   // Arrow props getter
-  const getArrowProps = (args) => {
+  const getArrowProps = (args = {}) => {
     return {
       ...args,
-      style: { ...styles.arrow, ...args?.style },
+      style: { ...styles.arrow, ...args.style },
       ...attributes.arrow,
       "data-popper-arrow": true,
     };

@@ -23,7 +23,9 @@ export function PortalExample() {
   );
 
   return (
-    <>
+    <div className="App">
+      <h1>React portal example</h1>
+
       <button type="button" ref={setTriggerRef}>
         Reference element
       </button>
@@ -42,6 +44,6 @@ export function PortalExample() {
           </div>,
           document.body
         )}
-    </>
+    </div>
   );
 }

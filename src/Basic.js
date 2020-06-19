@@ -21,7 +21,9 @@ export function BasicExample() {
   );
 
   return (
-    <>
+    <div className="App">
+      <h1>Basic example</h1>
+
       <button type="button" ref={setTriggerRef}>
         Reference element
       </button>
@@ -38,6 +40,6 @@ export function BasicExample() {
           />
         </div>
       )}
-    </>
+    </div>
   );
 }

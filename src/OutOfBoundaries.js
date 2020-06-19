@@ -5,7 +5,7 @@ import { usePopperTooltip } from "./usePopperTooltip";
 const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
 
 export function OutOfBoundariesExample() {
-  const [visibleController, setVisible] = React.useState(true);
+  const [visibleControlled, setVisible] = React.useState(false);
 
   const {
     getArrowProps,
@@ -16,7 +16,7 @@ export function OutOfBoundariesExample() {
     visible,
     state,
   } = usePopperTooltip(
-    { visible: visibleController, onVisibleChange: setVisible },
+    { visible: visibleControlled, onVisibleChange: setVisible },
     {
       modifiers,
     }
@@ -29,7 +29,13 @@ export function OutOfBoundariesExample() {
   }, [isReferenceHidden]);
 
   return (
-    <>
+    <div className="App">
+      <h1>Out of boundaries</h1>
+      <p>
+        Close the tooltip if the reference element is out of the viewport.
+        Scroll the page down.
+      </p>
+
       <button type="button" ref={setTriggerRef}>
         Reference element
       </button>
@@ -46,6 +52,6 @@ export function OutOfBoundariesExample() {
           />
         </div>
       )}
-    </>
+    </div>
   );
 }
