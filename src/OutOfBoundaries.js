@@ -4,7 +4,9 @@ import { usePopperTooltip } from "./usePopperTooltip";
 
 const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
 
-export function BasicExample() {
+export function OutOfBoundariesExample() {
+  const [visibleController, setVisible] = React.useState(true);
+
   const {
     getArrowProps,
     getTooltipProps,
@@ -12,13 +14,19 @@ export function BasicExample() {
     setTooltipRef,
     setTriggerRef,
     visible,
+    state,
   } = usePopperTooltip(
-    {},
+    { visible: visibleController, onVisibleChange: setVisible },
     {
-      placement: "top",
       modifiers,
     }
   );
+
+  const isReferenceHidden = state?.modifiersData?.hide?.isReferenceHidden;
+
+  React.useEffect(() => {
+    if (isReferenceHidden) setVisible(false);
+  }, [isReferenceHidden]);
 
   return (
     <>

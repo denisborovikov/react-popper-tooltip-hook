@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.css";
 import { usePopperTooltip } from "./usePopperTooltip";
 
-const modifiers = [{ name: "offset", options: { offset: [10, 10] } }];
+const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
 
 export function MutationObserverExample() {
   const {

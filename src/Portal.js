@@ -3,7 +3,7 @@ import "./styles.css";
 import { usePopperTooltip } from "./usePopperTooltip";
 import { createPortal } from "react-dom";
 
-const modifiers = [{ name: "offset", options: { offset: [10, 10] } }];
+const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
 
 export function PortalExample() {
   const {
