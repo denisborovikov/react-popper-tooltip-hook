@@ -5,52 +5,26 @@ import { usePopperTooltip } from "./usePopperTooltip";
 export function FollowCursorExample() {
   const store = React.useRef();
 
-  // const modifiers = React.useMemo(
-  //   () => [
-  //     {
-  //       name: "offset",
-  //       options: {
-  //         offset: ({ reference, popper }) => {
-  //           return [
-  //             mousePos.current?.y - reference.y,
-  //             mousePos.current?.x - reference.x,
-  //           ];
-  //         },
-  //       },
-  //     },
-  //   ],
-  //   []
-  // );
-
   const {
     triggerRef,
     tooltipRef,
-    getArrowProps,
     getTooltipProps,
-    setArrowRef,
     setTooltipRef,
     setTriggerRef,
     visible,
     update,
-  } = usePopperTooltip(
-    {
-      trigger: "hover",
-      // delayHide: 300,
-      // delayShow: 300,
-    },
-    {
-      placement: "auto",
-    }
-  );
+  } = usePopperTooltip({
+    trigger: "click",
+  });
 
-  React.useLayoutEffect(() => {
-    if (triggerRef == null || update == null) return;
+  React.useEffect(() => {
+    if (triggerRef == null) return;
 
-    const tooltipRect = tooltipRef.getBoundingClientRect();
+    const tooltipRect = tooltipRef?.getBoundingClientRect() || {};
 
     function storeMousePosition({ pageX, pageY }) {
       store.current = { pageX, pageY, ...tooltipRect };
-      update();
+      if (update !== null) update();
     }
 
     triggerRef.addEventListener("mousemove", storeMousePosition);
