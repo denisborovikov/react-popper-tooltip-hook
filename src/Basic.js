@@ -4,7 +4,7 @@ import { usePopperTooltip } from "./usePopperTooltip";
 
 const modifiers = [{ name: "offset", options: { offset: [10, 10] } }];
 
-export default function App() {
+export function BasicExample() {
   const {
     getArrowProps,
     getTooltipProps,

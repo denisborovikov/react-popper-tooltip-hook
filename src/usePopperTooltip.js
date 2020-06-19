@@ -59,8 +59,6 @@ export function usePopperTooltip(config = emptyObj, popperOptions = emptyObj) {
     [getLatest]
   );
 
-  useCheckRefEqual(isTriggeredBy);
-
   const hideTooltip = React.useCallback(() => {
     clearTimeout(timer.current);
     timer.current = setTimeout(
