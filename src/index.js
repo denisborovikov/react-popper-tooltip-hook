@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import App from "./App";
-import { FollowCursor } from "./FollowCursor";
+import { FollowCursorExample } from "./FollowCursor";
+import { MutationObserverExample } from "./MutationObserver";
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
@@ -10,7 +11,10 @@ ReactDOM.render(
     <h2>Basic example</h2>
     <App />
     <h2>Follow cursor example</h2>
-    <FollowCursor />
+    <FollowCursorExample />
+    <h2>Mutation observer</h2>
+    <p>Resize the textarea</p>
+    <MutationObserverExample />
   </React.StrictMode>,
   rootElement
 );

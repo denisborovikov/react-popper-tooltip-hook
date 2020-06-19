@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.css";
 import { usePopperTooltip } from "./usePopperTooltip";
 
-export function FollowCursor() {
+export function FollowCursorExample() {
   const store = React.useRef();
 
   // const modifiers = React.useMemo(
