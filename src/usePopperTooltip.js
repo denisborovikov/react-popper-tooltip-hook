@@ -2,8 +2,6 @@ import React from "react";
 import { usePopper } from "react-popper";
 import { useControlledProp, useGetLatest } from "./utils";
 
-const emptyObj = {};
-
 function useCheckRefEqual(val) {
   const ref = React.useRef();
   console.log(ref.current === val);
@@ -16,7 +14,7 @@ const defaultConfig = {
   delayShow: 0,
 };
 
-export function usePopperTooltip(config = emptyObj, popperOptions = emptyObj) {
+export function usePopperTooltip(config, popperOptions) {
   config = {
     ...defaultConfig,
     ...config,
@@ -43,9 +41,7 @@ export function usePopperTooltip(config = emptyObj, popperOptions = emptyObj) {
     visible,
     triggerRef,
     tooltipRef,
-    arrowRef,
     config,
-    popperOptions,
   });
 
   const isTriggeredBy = React.useCallback(
@@ -83,7 +79,6 @@ export function usePopperTooltip(config = emptyObj, popperOptions = emptyObj) {
     }
   }, [getLatest, hideTooltip, showTooltip]);
 
-  // Timer clean-up
   React.useEffect(() => clearTimeout(timer.current), []);
 
   // Handle click outside
@@ -131,7 +126,7 @@ export function usePopperTooltip(config = emptyObj, popperOptions = emptyObj) {
     };
   }, [triggerRef, isTriggeredBy, showTooltip, hideTooltip]);
 
-  // Trigger: hover (trigger)
+  // Trigger: hover on trigger
   React.useEffect(() => {
     if (triggerRef == null || !isTriggeredBy("hover")) return;
 
@@ -143,7 +138,7 @@ export function usePopperTooltip(config = emptyObj, popperOptions = emptyObj) {
     };
   }, [triggerRef, isTriggeredBy, showTooltip, hideTooltip]);
 
-  // Trigger: hover (tooltip), keep the tooltip open if hovered
+  // Trigger: hover on tooltip, keep it open if hovered
   React.useEffect(() => {
     if (tooltipRef == null || !isTriggeredBy("hover")) return;
 
@@ -173,8 +168,6 @@ export function usePopperTooltip(config = emptyObj, popperOptions = emptyObj) {
       "data-popper-arrow": true,
     };
   };
-
-  // useCheckRefEqual(getArrowProps);
 
   return {
     arrowRef,
