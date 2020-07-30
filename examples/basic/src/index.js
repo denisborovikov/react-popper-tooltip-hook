@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./styles.css";
-import { usePopperTooltip } from "react-popper-tooltip-hook/src/usePopperTooltip";
+import { usePopperTooltip } from "react-popper-tooltip-hook";
 
 const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
 
