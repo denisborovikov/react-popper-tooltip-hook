@@ -39,16 +39,16 @@ function TooltipTrigger({
   placement,
   trigger,
   getTriggerRef,
-  closeOnReferenceHidden,
+  // closeOnReferenceHidden,
   usePortal,
   portalContainer,
-  followCursor,
+  // followCursor,
   modifiers,
-  mutationObserverOptions,
+  // mutationObserverOptions,
 }) {
   const {
     // arrowRef,
-    tooltipRef,
+    // tooltipRef,
     triggerRef,
     getArrowProps,
     getTooltipProps,
@@ -56,7 +56,7 @@ function TooltipTrigger({
     setTooltipRef,
     setTriggerRef,
     visible,
-    update,
+    // update,
   } = usePopperTooltip(
     {
       trigger,
@@ -88,14 +88,6 @@ function TooltipTrigger({
   React.useEffect(() => {
     getTriggerRef(triggerRef);
   }, [triggerRef, getTriggerRef]);
-
-  React.useEffect(() => {
-    if (tooltipRef == null || update == null) return;
-
-    const observer = new MutationObserver(update);
-    observer.observe(tooltipRef, mutationObserverOptions);
-    return () => observer.disconnect();
-  }, [tooltipRef, update, mutationObserverOptions]);
 
   return (
     <>
