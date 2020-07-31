@@ -2,12 +2,6 @@ import React from "react";
 import { usePopper } from "react-popper";
 import { useControlledProp, useGetLatest } from "./utils";
 
-function useCheckRefEqual(val) {
-  const ref = React.useRef();
-  console.log(ref.current === val);
-  ref.current = val;
-}
-
 const defaultConfig = {
   trigger: "click",
   delayHide: 0,

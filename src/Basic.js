@@ -2,9 +2,9 @@ import React from "react";
 import "./styles.css";
 import { usePopperTooltip } from "./usePopperTooltip";
 
-const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
-
 export function BasicExample() {
+  const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
+
   const {
     getArrowProps,
     getTooltipProps,
