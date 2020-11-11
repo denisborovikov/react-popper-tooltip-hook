@@ -1,12 +1,10 @@
-import React from "react";
+import * as React from "react";
 import "./styles.css";
 import { usePopperTooltip } from "./usePopperTooltip";
 
 const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
 
 export function OutOfBoundariesExample() {
-  const [visibleControlled, setVisible] = React.useState(false);
-
   const {
     getArrowProps,
     getTooltipProps,
@@ -14,19 +12,12 @@ export function OutOfBoundariesExample() {
     setTooltipRef,
     setTriggerRef,
     visible,
-    state,
   } = usePopperTooltip(
-    { visible: visibleControlled, onVisibleChange: setVisible },
+    { closeOnReferenceHidden: true },
     {
       modifiers,
     }
   );
-
-  const isReferenceHidden = state?.modifiersData?.hide?.isReferenceHidden;
-
-  React.useEffect(() => {
-    if (isReferenceHidden) setVisible(false);
-  }, [isReferenceHidden]);
 
   return (
     <div className="App">

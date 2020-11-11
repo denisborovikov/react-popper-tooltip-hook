@@ -1,22 +1,22 @@
-import React from "react";
+import * as React from "react";
 import "./styles.css";
 import { usePopperTooltip } from "./usePopperTooltip";
 
-const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
-
 export function MutationObserverExample() {
+  const [isObserverOn, setIsObserverOn] = React.useState(true);
+
+  const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
+
   const {
-    tooltipRef,
     getArrowProps,
     getTooltipProps,
     setArrowRef,
     setTooltipRef,
     setTriggerRef,
     visible,
-    update,
   } = usePopperTooltip(
     {
-      trigger: "click",
+      ...(!isObserverOn && { mutationObserverOptions: undefined }),
     },
     {
       placement: "right",
@@ -24,22 +24,19 @@ export function MutationObserverExample() {
     }
   );
 
-  React.useEffect(() => {
-    if (tooltipRef == null || update == null) return;
-
-    const observer = new MutationObserver(update);
-    observer.observe(tooltipRef, {
-      attributes: true,
-      childList: true,
-      subtree: true,
-    });
-    return () => observer.disconnect();
-  }, [tooltipRef, update]);
-
   return (
     <div className="App">
       <h1>Mutation observer</h1>
-      <p>Watch for the tooltip size changes. Resize the textarea.</p>
+      <p>
+        <label>
+          <input
+            type="checkbox"
+            checked={isObserverOn}
+            onChange={() => setIsObserverOn(!isObserverOn)}
+          />
+          Use mutation observer
+        </label>
+      </p>
 
       <button type="button" ref={setTriggerRef}>
         Reference element
@@ -50,6 +47,7 @@ export function MutationObserverExample() {
           ref={setTooltipRef}
           {...getTooltipProps({ className: "tooltip-container" })}
         >
+          <p> Resize the textarea.</p>
           <textarea />
           <div
             ref={setArrowRef}

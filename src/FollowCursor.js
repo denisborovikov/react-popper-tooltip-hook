@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import "./styles.css";
 import { usePopperTooltip } from "./usePopperTooltip";
 
@@ -52,12 +52,8 @@ export function FollowCursorExample() {
     <div className="App">
       <h1>Follow cursor example</h1>
 
-      <button type="button" ref={setTriggerRef}>
-        <br />
-        <br />
-        Reference element <br />
-        <br />
-        <br />
+      <button type="button" ref={setTriggerRef} style={{width: '200px', height: '200px'}}>
+        Reference element
       </button>
 
       {visible && (

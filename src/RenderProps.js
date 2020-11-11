@@ -1,31 +1,26 @@
-import React from "react";
+import * as React from "react";
 import "./styles.css";
 import { createPortal } from "react-dom";
 import { usePopperTooltip } from "./usePopperTooltip";
 import { canUseDOM } from "./utils";
-
-const DEFAULT_MUTATION_OBSERVER_CONFIG = {
-  childList: true,
-  subtree: true,
-};
-
-const noop = () => {
-  // do nothing
-};
 
 const defaultProps = {
   closeOnReferenceHidden: true,
   defaultTooltipShown: false,
   delayHide: 0,
   delayShow: 0,
-  followCursor: false,
-  onVisibilityChange: noop,
+  // followCursor: false,
+  onVisibilityChange: () => {},
   placement: "right",
   portalContainer: canUseDOM() ? document.body : null,
   trigger: "hover",
   usePortal: canUseDOM(),
-  mutationObserverOptions: DEFAULT_MUTATION_OBSERVER_CONFIG,
-  modifiers: [],
+  mutationObserverOptions: {
+    attributes: true,
+    childList: true,
+    subtree: true,
+  },
+  modifiers: [{ name: "offset", options: { offset: [0, 10] } }],
 };
 
 function TooltipTrigger({
@@ -39,12 +34,12 @@ function TooltipTrigger({
   placement,
   trigger,
   getTriggerRef,
-  // closeOnReferenceHidden,
+  closeOnReferenceHidden,
   usePortal,
   portalContainer,
   // followCursor,
   modifiers,
-  // mutationObserverOptions,
+  mutationObserverOptions,
 }) {
   const {
     // arrowRef,
@@ -56,7 +51,6 @@ function TooltipTrigger({
     setTooltipRef,
     setTriggerRef,
     visible,
-    // update,
   } = usePopperTooltip(
     {
       trigger,
@@ -65,6 +59,8 @@ function TooltipTrigger({
       initialVisible: defaultTooltipShown,
       onVisibleChange: onVisibilityChange,
       visible: tooltipShown,
+      closeOnReferenceHidden,
+      mutationObserverOptions,
     },
     {
       placement,
