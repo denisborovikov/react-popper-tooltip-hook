@@ -1,52 +1,24 @@
 import * as React from "react";
 import ReactDOM from "react-dom";
-import "./styles.css";
-import { usePopperTooltip } from "react-popper-tooltip-hook/usePopperTooltip";
+import { BasicExample } from "./Basic";
+import { RenderPropsExample } from "./RenderProps";
+import { PortalExample } from "./Portal";
+import { FollowCursorExample } from "./FollowCursor";
+import { MutationObserverExample } from "./MutationObserver";
+import { OutOfBoundariesExample } from "./OutOfBoundaries";
 
-const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
-
-function App() {
-  const {
-    getArrowProps,
-    getTooltipProps,
-    setArrowRef,
-    setTooltipRef,
-    setTriggerRef,
-    visible,
-  } = usePopperTooltip(
-    {
-      delayHide: 500,
-      delayShow: 500,
-    },
-    {
-      placement: "right",
-      modifiers,
-    }
-  );
-
-  return (
-    <div className="App">
-      <h1>Basic example</h1>
-
-      <button type="button" ref={setTriggerRef}>
-        Reference element
-      </button>
-
-      {visible && (
-        <div
-          ref={setTooltipRef}
-          {...getTooltipProps({ className: "tooltip-container" })}
-        >
-          Popper element
-          <div
-            ref={setArrowRef}
-            {...getArrowProps({ className: "tooltip-arrow" })}
-          />
-        </div>
-      )}
-    </div>
-  );
-}
 
 const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+ReactDOM.render(
+  <React.StrictMode>
+    <div style={{ height: "200vh" }}>
+      <BasicExample />
+      <RenderPropsExample />
+      <PortalExample />
+      <FollowCursorExample />
+      <MutationObserverExample />
+      <OutOfBoundariesExample />
+    </div>
+  </React.StrictMode>,
+  rootElement
+);

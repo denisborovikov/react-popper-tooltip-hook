@@ -32,11 +32,3 @@ export function useControlledProp({ initial, value, onChange = noop }) {
 
   return [isControlled ? value : state, isControlled ? onChange : set];
 }
-
-export function canUseDOM() {
-  return Boolean(
-    typeof window !== "undefined" &&
-    window.document &&
-    window.document.createElement
-  );
-}

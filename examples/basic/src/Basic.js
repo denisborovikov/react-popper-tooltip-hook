@@ -1,10 +1,9 @@
 import * as React from "react";
-import "./styles.css";
-import { usePopperTooltip } from "./usePopperTooltip";
+import "react-popper-tooltip-hook/src/styles.css";
+import { usePopperTooltip } from "react-popper-tooltip-hook";
 
-const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
+export function BasicExample() {
 
-export function OutOfBoundariesExample() {
   const {
     getArrowProps,
     getTooltipProps,
@@ -13,19 +12,15 @@ export function OutOfBoundariesExample() {
     setTriggerRef,
     visible,
   } = usePopperTooltip(
-    { closeOnReferenceHidden: true },
+    {},
     {
-      modifiers,
+      placement: "top",
     }
   );
 
   return (
     <div className="App">
-      <h1>Out of boundaries</h1>
-      <p>
-        Close the tooltip if the reference element is out of the viewport.
-        Scroll the page down.
-      </p>
+      <h1>Basic example</h1>
 
       <button type="button" ref={setTriggerRef}>
         Reference element

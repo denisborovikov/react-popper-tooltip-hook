@@ -1,6 +1,6 @@
 import * as React from "react";
-import "./styles.css";
-import { usePopperTooltip } from "./usePopperTooltip";
+import "react-popper-tooltip-hook/src/styles.css";
+import { usePopperTooltip } from "react-popper-tooltip-hook";
 
 export function FollowCursorExample() {
   const store = React.useRef();

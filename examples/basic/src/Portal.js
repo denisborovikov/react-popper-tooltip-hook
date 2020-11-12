@@ -1,9 +1,7 @@
 import * as React from "react";
-import "./styles.css";
-import { usePopperTooltip } from "./usePopperTooltip";
 import { createPortal } from "react-dom";
-
-const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
+import "react-popper-tooltip-hook/src/styles.css";
+import { usePopperTooltip } from "react-popper-tooltip-hook";
 
 export function PortalExample() {
   const {
@@ -13,14 +11,7 @@ export function PortalExample() {
     setTooltipRef,
     setTriggerRef,
     visible,
-  } = usePopperTooltip(
-    {
-      trigger: "click",
-    },
-    {
-      modifiers,
-    }
-  );
+  } = usePopperTooltip();
 
   return (
     <div className="App">

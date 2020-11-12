@@ -2,8 +2,8 @@ import * as React from "react";
 import { usePopper } from "react-popper";
 import { useControlledProp, useGetLatest } from "./utils";
 
-const defaultConfig = {
-  trigger: "click",
+export const defaultConfig = {
+  trigger: "hover",
   delayHide: 0,
   delayShow: 0,
   mutationObserverOptions: {
@@ -13,10 +13,19 @@ const defaultConfig = {
   },
 };
 
+export const defaultPopperOptions = {
+  modifiers: [{ name: "offset", options: { offset: [0, 10] } }],
+};
+
 export function usePopperTooltip(config, popperOptions) {
   config = {
     ...defaultConfig,
     ...config,
+  };
+
+  popperOptions = {
+    ...defaultPopperOptions,
+    ...popperOptions,
   };
 
   const [triggerRef, setTriggerRef] = React.useState(null);

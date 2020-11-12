@@ -1,11 +1,9 @@
 import * as React from "react";
-import "./styles.css";
-import { usePopperTooltip } from "./usePopperTooltip";
+import "react-popper-tooltip-hook/src/styles.css";
+import { usePopperTooltip } from "react-popper-tooltip-hook";
 
 export function MutationObserverExample() {
   const [isObserverOn, setIsObserverOn] = React.useState(true);
-
-  const modifiers = [{ name: "offset", options: { offset: [0, 10] } }];
 
   const {
     getArrowProps,
@@ -20,7 +18,6 @@ export function MutationObserverExample() {
     },
     {
       placement: "right",
-      modifiers,
     }
   );
 
