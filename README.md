@@ -2,6 +2,8 @@
 
 Experimenting with possible hook API for [react-popper-tooltip](https://github.com/mohsinulhaq/react-popper-tooltip).
 
+**Updated**: Eventually it was released as react-popper-tooltip version 4.
+
 [Codesandbox](https://codesandbox.io/s/github/denisborovikov/react-popper-tooltip-hook).
 
 ```jsx
